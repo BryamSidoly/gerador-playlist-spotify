@@ -9,8 +9,9 @@ const playlistDiv = document.getElementById("playlist");
 let accessToken = 'BQBe1FrWilhsQHQDHmysE1fegAdbCCocciqNBUvdGk2kQtP1RIdUviWm4WcV6J-dOLqQvdCJSDU3BDPGEF4pyhJTAk0n_jCIlodoZYaciYYU4tu50CrCUzRhOSpN4a3RJu3QN2HDpmY';
 
 // 1. Autenticar com Spotify
-/*
+
 window.onload = () => {
+/*
   const hash = window.location.hash;
   if (hash.includes("access_token")) {
     accessToken = new URLSearchParams(hash.substring(1)).get("access_token");
