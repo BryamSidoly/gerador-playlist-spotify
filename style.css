@@ -1,36 +1,55 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 1rem;
-  background: #121212;
-  color: #ffffff;
-}
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 1rem;
+      background-color: #121212; /* Spotify dark background */
+      color: #FFFFFF;
+    }
 
-.container {
-  max-width: 500px;
-  margin: auto;
-  background: #1e1e1e;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-}
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background-color: #181818; /* Slightly lighter dark */
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    }
 
-label {
-  margin-top: 1rem;
-  margin-bottom: 0.3rem;
-  font-weight: bold;
-}
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      color: #1DB954; /* Spotify green */
+    }
 
-input,
-select {
-  background-color: #2a2a2a;
-  color: #ffffff;
-  border: 1px solid #333;
-  border-radius: 6px;
-  padding: 0.6rem;
-  font-size: 1rem;
-  width: 100%;
-  margin-bottom: 1rem;
-}
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #b3b3b3;
+    }
+
+    select,
+    input[type="number"] {
+      display: block;
+      width: 100%;
+      padding: 0.6rem 1rem;
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      border: none;
+      background-color: #282828;
+      color: #FFFFFF;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    select:hover,
+    input[type="number"]:hover,
+    select:focus,
+    input[type="number"]:focus {
+      background-color: #333333;
+      outline: none;
+    }
+
 
 button {
   display: inline-flex;
@@ -62,8 +81,15 @@ button:hover svg {
   transform: translateX(4px);
 }
 
+#playlist {
+      margin-top: 1.5rem;
+      color: #b3b3b3;
+    }
 
-audio {
-  width: 100%;
-  margin: 10px 0;
-}
+    audio {
+      width: 100%;
+      margin: 0.7rem 0;
+      outline: none;
+      border-radius: 8px;
+      background-color: #282828;
+    }
