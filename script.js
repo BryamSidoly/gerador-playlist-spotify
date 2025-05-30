@@ -6,7 +6,7 @@ const RESPONSE_TYPE = 'token';
 const generateBtn = document.getElementById("generate");
 const playlistDiv = document.getElementById("playlist");
 
-let accessToken = 'BQBe1FrWilhsQHQDHmysE1fegAdbCCocciqNBUvdGk2kQtP1RIdUviWm4WcV6J-dOLqQvdCJSDU3BDPGEF4pyhJTAk0n_jCIlodoZYaciYYU4tu50CrCUzRhOSpN4a3RJu3QN2HDpmY';
+let accessToken = 'BQBhfzPZoYd0H7kHJMFJY2jQg2akAv8wwcyUEHtqAIQ3I6kaBJrcF_iaeOfe11qSfV60rjPki0snBwyM_UJ0xWl1ToIafRcKruUvjQ1mzh9nY8W6TR3-tvmzosKhwhhPzEflXPf56qI';
 
 // Autenticação
 window.onload = () => {
