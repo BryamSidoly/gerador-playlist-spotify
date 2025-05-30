@@ -1,0 +1,35 @@
+body {
+  font-family: sans-serif;
+  padding: 1rem;
+  background: #f7f7f7;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+label, input, select {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+button {
+  padding: 10px;
+  width: 100%;
+  background: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+audio {
+  width: 100%;
+  margin: 5px 0;
+}
