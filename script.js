@@ -6,9 +6,10 @@ const RESPONSE_TYPE = 'token';
 const generateBtn = document.getElementById("generate");
 const playlistDiv = document.getElementById("playlist");
 
-let accessToken = null;
+let accessToken = 'BQBe1FrWilhsQHQDHmysE1fegAdbCCocciqNBUvdGk2kQtP1RIdUviWm4WcV6J-dOLqQvdCJSDU3BDPGEF4pyhJTAk0n_jCIlodoZYaciYYU4tu50CrCUzRhOSpN4a3RJu3QN2HDpmY';
 
 // 1. Autenticar com Spotify
+/*
 window.onload = () => {
   const hash = window.location.hash;
   if (hash.includes("access_token")) {
@@ -16,6 +17,7 @@ window.onload = () => {
     console.log("Token recebido:", accessToken);
     window.history.replaceState(null, null, REDIRECT_URI);
   }
+  */
   if (!accessToken) {
     console.log("Redirecionando para login...");
     window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
@@ -23,6 +25,7 @@ window.onload = () => {
 };
 
 generateBtn.addEventListener("click", async () => {
+  
   if (!accessToken) {
     alert("Você precisa estar autenticado no Spotify.");
     return;
