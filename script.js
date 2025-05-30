@@ -79,7 +79,7 @@ window.onload = async () => {
       await fetchAccessToken(code);
       window.history.replaceState({}, document.title, REDIRECT_URI);
     } catch (e) {
-      alert("Erro ao obter token de acesso. Tente novamente.");
+      alert("Error getting access token. Please try again.");
       console.error(e);
     }
   }
@@ -87,7 +87,7 @@ window.onload = async () => {
 
 generateBtn.addEventListener("click", async () => {
   if (!accessToken) {
-    alert("Você precisa estar autenticado no Spotify.");
+    alert("You need to be authenticated with Spotify.");
     return;
   }
 
@@ -101,8 +101,8 @@ generateBtn.addEventListener("click", async () => {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("Erro da API Spotify:", error);
-      alert("Erro ao buscar músicas. Verifique seu token ou tente novamente.");
+      console.error("Spotify API error:", error);
+      alert("Error fetching songs. Check your token or try again.");
       return;
     }
 
@@ -110,26 +110,26 @@ generateBtn.addEventListener("click", async () => {
     const tracks = data.tracks.items;
 
     if (!tracks || tracks.length === 0) {
-      alert("Nenhuma música encontrada.");
+      alert("No songs found.");
       return;
     }
 
     showPlaylist(tracks);
     createAndPlayPlaylist(tracks);
   } catch (error) {
-    console.error("Erro ao buscar músicas:", error);
-    alert("Ocorreu um erro inesperado. Tente novamente.");
+    console.error("Error fetching songs:", error);
+    alert("An unexpected error occurred. Please try again.");
   }
 });
 
 function showPlaylist(tracks) {
-  playlistDiv.innerHTML = "<h2>Sua Playlist:</h2>";
+  playlistDiv.innerHTML = "<h2>Your Playlist:</h2>";
   tracks.forEach(track => {
     const item = document.createElement("div");
     item.innerHTML = `
       <p><strong>${track.name}</strong> - ${track.artists[0].name}</p>
-      ${track.preview_url ? `<audio controls src="${track.preview_url}"></audio>` : "<p>Prévia não disponível</p>"}
-      <a href="${track.external_urls.spotify}" target="_blank">Ouvir no Spotify</a>
+      ${track.preview_url ? `<audio controls src="${track.preview_url}"></audio>` : "<p>Preview not available</p>"}
+      <a href="${track.external_urls.spotify}" target="_blank">Listen on Spotify</a>
       <hr/>
     `;
     playlistDiv.appendChild(item);
@@ -137,7 +137,7 @@ function showPlaylist(tracks) {
 }
 
 async function createAndPlayPlaylist(tracks) {
-  // Criar uma nova playlist no perfil do usuário
+  // Create a new playlist on the user's profile
   const userProfileRes = await fetch("https://api.spotify.com/v1/me", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -150,8 +150,8 @@ async function createAndPlayPlaylist(tracks) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      name: 'Recomendações de Treino',
-      description: 'Playlist gerada automaticamente',
+      name: 'Workout Recommendations',
+      description: 'Automatically generated playlist',
       public: true
     })
   });
@@ -168,7 +168,7 @@ async function createAndPlayPlaylist(tracks) {
     body: JSON.stringify({ uris })
   });
 
-  // Iniciar a reprodução da playlist no dispositivo ativo do usuário
+  // Start playback of the playlist on the user's active device
   await fetch("https://api.spotify.com/v1/me/player/play", {
     method: 'PUT',
     headers: {
