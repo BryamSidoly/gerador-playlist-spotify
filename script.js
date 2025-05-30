@@ -38,7 +38,7 @@ async function redirectToSpotifyAuth() {
     redirect_uri: REDIRECT_URI,
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
-    scope: 'user-read-private'
+    scope: 'user-read-private playlist-modify-public streaming user-modify-playback-state user-read-playback-state'
   });
 
   window.location = `${SPOTIFY_AUTH_URL}?${params}`;
@@ -77,7 +77,7 @@ window.onload = async () => {
   } else {
     try {
       await fetchAccessToken(code);
-      window.history.replaceState({}, document.title, REDIRECT_URI); // Clean the URL
+      window.history.replaceState({}, document.title, REDIRECT_URI);
     } catch (e) {
       alert("Erro ao obter token de acesso. Tente novamente.");
       console.error(e);
@@ -91,16 +91,10 @@ generateBtn.addEventListener("click", async () => {
     return;
   }
 
-  const intensity = document.getElementById("intensity").value;
-  const duration = parseInt(document.getElementById("duration").value);
-  const energy = getEnergyFromIntensity(intensity);
-
-  const seedGenres = "pop";
-  const limit = 10;
-
-  const url = `https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}`;
-
   try {
+    const query = 'top';
+    const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10&market=BR`;
+
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -113,27 +107,20 @@ generateBtn.addEventListener("click", async () => {
     }
 
     const data = await response.json();
+    const tracks = data.tracks.items;
 
-    if (!data.tracks || data.tracks.length === 0) {
+    if (!tracks || tracks.length === 0) {
       alert("Nenhuma música encontrada.");
       return;
     }
 
-    showPlaylist(data.tracks);
+    showPlaylist(tracks);
+    createAndPlayPlaylist(tracks);
   } catch (error) {
     console.error("Erro ao buscar músicas:", error);
     alert("Ocorreu um erro inesperado. Tente novamente.");
   }
 });
-
-function getEnergyFromIntensity(intensity) {
-  switch (intensity) {
-    case "baixa": return 0.3;
-    case "media": return 0.6;
-    case "alta": return 0.8;
-    default: return 0.5;
-  }
-}
 
 function showPlaylist(tracks) {
   playlistDiv.innerHTML = "<h2>Sua Playlist:</h2>";
@@ -146,5 +133,48 @@ function showPlaylist(tracks) {
       <hr/>
     `;
     playlistDiv.appendChild(item);
+  });
+}
+
+async function createAndPlayPlaylist(tracks) {
+  // Criar uma nova playlist no perfil do usuário
+  const userProfileRes = await fetch("https://api.spotify.com/v1/me", {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const userData = await userProfileRes.json();
+
+  const createPlaylistRes = await fetch(`https://api.spotify.com/v1/users/${userData.id}/playlists`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: 'Recomendações de Treino',
+      description: 'Playlist gerada automaticamente',
+      public: true
+    })
+  });
+
+  const playlist = await createPlaylistRes.json();
+  const uris = tracks.map(track => track.uri);
+
+  await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ uris })
+  });
+
+  // Iniciar a reprodução da playlist no dispositivo ativo do usuário
+  await fetch("https://api.spotify.com/v1/me/player/play", {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ context_uri: playlist.uri })
   });
 }
