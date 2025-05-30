@@ -1,5 +1,5 @@
 const CLIENT_ID = '9099b5f49bf54e6b8a55c63827d9f743';
-const REDIRECT_URI = 'https://bryamsidoly.github.io/gerador-playlist-spotify/'; 
+const REDIRECT_URI = 'https://bryamsidoly.github.io/gerador-playlist-spotify/';
 const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const RESPONSE_TYPE = 'token';
 
@@ -23,45 +23,50 @@ window.onload = () => {
 };
 
 generateBtn.addEventListener("click", async () => {
-   if (!accessToken) {
+  if (!accessToken) {
     alert("Você precisa estar autenticado no Spotify.");
     return;
   }
-  if (!response.ok) {
-  if (response.status === 401) {
-    alert("Sua sessão expirou. Vamos fazer login novamente.");
-    window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
-    return;
-  }
-  
+
   const intensity = document.getElementById("intensity").value;
   const duration = parseInt(document.getElementById("duration").value);
   const energy = getEnergyFromIntensity(intensity);
 
-  const seedGenres = "workout,dance,edm,hip-hop,pop"; // gêneros possíveis
+  const seedGenres = "workout,dance,edm,hip-hop,pop";
   const limit = 10;
 
   const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seedGenres}&min_energy=${energy}&min_tempo=${energy * 100}&target_duration_ms=${(duration * 60 * 1000) / limit}`;
 
-const response = await fetch(url, {
-  headers: { Authorization: `Bearer ${accessToken}` },
-});
+  try {
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
 
-if (!response.ok) {
-  const error = await response.json()
-  console.error("Erro da API Spotify:", error);
-  alert("Erro ao buscar músicas. Verifique seu token ou tente novamente.");
-  return;
-}
+    if (!response.ok) {
+      if (response.status === 401) {
+        alert("Sua sessão expirou. Vamos fazer login novamente.");
+        window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
+        return;
+      }
 
-const data = await response.json(); 
+      const error = await response.json();
+      console.error("Erro da API Spotify:", error);
+      alert("Erro ao buscar músicas. Verifique seu token ou tente novamente.");
+      return;
+    }
 
-if (!data.tracks || data.tracks.length === 0) {
-  alert("Nenhuma música encontrada.");
-  return;
-}
+    const data = await response.json();
 
-showPlaylist(data.tracks);
+    if (!data.tracks || data.tracks.length === 0) {
+      alert("Nenhuma música encontrada.");
+      return;
+    }
+
+    showPlaylist(data.tracks);
+  } catch (error) {
+    console.error("Erro ao buscar músicas:", error);
+    alert("Ocorreu um erro inesperado. Tente novamente.");
+  }
 });
 
 function getEnergyFromIntensity(intensity) {
@@ -79,7 +84,7 @@ function showPlaylist(tracks) {
     const item = document.createElement("div");
     item.innerHTML = `
       <p><strong>${track.name}</strong> - ${track.artists[0].name}</p>
-      <audio controls src="${track.preview_url}"></audio>
+      ${track.preview_url ? `<audio controls src="${track.preview_url}"></audio>` : "<p>Prévia não disponível</p>"}
       <a href="${track.external_urls.spotify}" target="_blank">Ouvir no Spotify</a>
       <hr/>
     `;
