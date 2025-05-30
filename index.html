@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gerador de Playlist de Treino</title>
+  <title>Workout Playlist Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <div class="container">
-    <h1>Playlist de Treino</h1>
+    <h1>Workout Playlist</h1>
 
-    <label for="intensity">Intensidade do treino:</label>
+    <label for="intensity">Workout Intensity:</label>
     <select id="intensity">
-      <option value="baixa">Baixa</option>
-      <option value="media">Média</option>
-      <option value="alta">Alta</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
     </select>
 
-    <label for="duration">Duração (minutos):</label>
+    <label for="duration">Duration (minutes):</label>
     <input type="number" id="duration" min="1" max="120" value="30" />
 
-    <button id="generate">Gerar Playlist</button>
+    <button id="generate">Generate Playlist</button>
 
     <div id="playlist"></div>
   </div>
