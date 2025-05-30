@@ -36,7 +36,7 @@ generateBtn.addEventListener("click", async () => {
   const seedGenres = "pop"; // gênero válido para o seed
   const limit = 10;
 
-  const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seedGenres}&min_energy=${energy}&min_tempo=${energy * 150}`;
+  const url = `https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}`;
 
   try {
     const response = await fetch(url, {
