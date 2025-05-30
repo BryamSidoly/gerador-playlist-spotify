@@ -93,7 +93,7 @@ generateBtn.addEventListener("click", async () => {
 
   try {
     const query = 'top';
-    const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10&market=BR`;
+    const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10&market=US`;
 
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${accessToken}` },
