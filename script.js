@@ -27,12 +27,6 @@ generateBtn.addEventListener("click", async () => {
     alert("Você precisa estar autenticado no Spotify.");
     return;
   }
-  if (!response.ok) {
-  if (response.status === 401) {
-    alert("Sua sessão expirou. Vamos fazer login novamente.");
-    window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
-    return;
-  }
   
   const error = await response.json();
   console.error("Erro da API Spotify:", error);
