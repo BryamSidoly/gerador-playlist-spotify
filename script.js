@@ -34,26 +34,25 @@ generateBtn.addEventListener("click", async () => {
 
   const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seedGenres}&min_energy=${energy}&min_tempo=${energy * 100}&target_duration_ms=${(duration * 60 * 1000) / limit}`;
 
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+const response = await fetch(url, {
+  headers: { Authorization: `Bearer ${accessToken}` },
+});
 
-  const data = await response.json();
-  if (!response.ok) {
-  const error = await response.json();
+if (!response.ok) {
+  const error = await response.json()
   console.error("Erro da API Spotify:", error);
   alert("Erro ao buscar músicas. Verifique seu token ou tente novamente.");
   return;
 }
 
-const data = await response.json();
+const data = await response.json(); 
+
 if (!data.tracks || data.tracks.length === 0) {
   alert("Nenhuma música encontrada.");
   return;
 }
 
 showPlaylist(data.tracks);
-  showPlaylist(data.tracks);
 });
 
 function getEnergyFromIntensity(intensity) {
