@@ -11,11 +11,13 @@ let accessToken = null;
 // 1. Autenticar com Spotify
 window.onload = () => {
   const hash = window.location.hash;
-  if (!accessToken && hash) {
+  if (hash.includes("access_token")) {
     accessToken = new URLSearchParams(hash.substring(1)).get("access_token");
-    console.log("Access Token:", accessToken);
-    window.history.pushState("", "", REDIRECT_URI);
-  } else if (!accessToken) {
+    console.log("Token recebido:", accessToken);
+    window.history.replaceState(null, null, REDIRECT_URI);
+  }
+  if (!accessToken) {
+    console.log("Redirecionando para login...");
     window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
   }
 };
