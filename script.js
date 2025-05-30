@@ -33,10 +33,10 @@ generateBtn.addEventListener("click", async () => {
   const duration = parseInt(document.getElementById("duration").value);
   const energy = getEnergyFromIntensity(intensity);
 
-  const seedGenres = "workout"; // Gênero fixo
+  const seedGenres = "pop"; // gênero válido para o seed
   const limit = 10;
 
-  const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seedGenres}&min_energy=${energy}&min_tempo=${energy * 100}&target_duration_ms=${(duration * 60 * 1000) / limit}`;
+  const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seedGenres}&min_energy=${energy}&min_tempo=${energy * 150}`;
 
   try {
     const response = await fetch(url, {
@@ -69,6 +69,7 @@ generateBtn.addEventListener("click", async () => {
     alert("Ocorreu um erro inesperado. Tente novamente.");
   }
 });
+
 
 function getEnergyFromIntensity(intensity) {
   switch (intensity) {
