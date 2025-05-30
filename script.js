@@ -5,64 +5,23 @@ const RESPONSE_TYPE = 'token';
 
 const generateBtn = document.getElementById("generate");
 const playlistDiv = document.getElementById("playlist");
-const genresContainer = document.getElementById("genres"); // div onde vamos criar os checkboxes
 
 let accessToken = 'BQBe1FrWilhsQHQDHmysE1fegAdbCCocciqNBUvdGk2kQtP1RIdUviWm4WcV6J-dOLqQvdCJSDU3BDPGEF4pyhJTAk0n_jCIlodoZYaciYYU4tu50CrCUzRhOSpN4a3RJu3QN2HDpmY';
 
-// 1. Autenticar com Spotify
-window.onload = async () => {
+// Autenticação
+window.onload = () => {
   /*
   const hash = window.location.hash;
-  if (!accessToken && hash.includes("access_token")) {
+  if (!accessToken && hash) {
     accessToken = new URLSearchParams(hash.substring(1)).get("access_token");
     console.log("Token recebido:", accessToken);
     window.history.replaceState(null, null, REDIRECT_URI);
   }
-*/
+    */
   if (!accessToken) {
-    console.log("Redirecionando para login...");
     window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
-    return;
   }
-
-  // Buscar gêneros disponíveis para seleção
-  await fetchAvailableGenres();
 };
-
-async function fetchAvailableGenres() {
-  try {
-    const res = await fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    if (!res.ok) {
-      throw new Error(`Erro ao buscar gêneros: ${res.status}`);
-    }
-    const data = await res.json();
-
-    renderGenreCheckboxes(data.genres);
-  } catch (error) {
-    console.error("Erro ao buscar gêneros:", error);
-    alert("Erro ao carregar gêneros. Tente recarregar a página.");
-  }
-}
-
-function renderGenreCheckboxes(genres) {
-  genresContainer.innerHTML = "<h3>Selecione gêneros para a playlist:</h3>";
-  genres.forEach((genre) => {
-    const label = document.createElement("label");
-    label.style.marginRight = "10px";
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.name = "genre";
-    checkbox.value = genre;
-
-    label.appendChild(checkbox);
-    label.appendChild(document.createTextNode(" " + genre));
-
-    genresContainer.appendChild(label);
-  });
-}
 
 generateBtn.addEventListener("click", async () => {
   if (!accessToken) {
@@ -70,22 +29,14 @@ generateBtn.addEventListener("click", async () => {
     return;
   }
 
-  const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(el => el.value);
-
-  if (selectedGenres.length === 0) {
-    alert("Selecione pelo menos um gênero.");
-    return;
-  }
-
   const intensity = document.getElementById("intensity").value;
   const duration = parseInt(document.getElementById("duration").value);
   const energy = getEnergyFromIntensity(intensity);
+
+  const seedGenres = "workout"; // Gênero fixo
   const limit = 10;
 
-  // Limitar a até 5 gêneros, pois a API aceita até 5 seeds
-  const seeds = selectedGenres.slice(0, 5).join(',');
-
-  const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seeds}&min_energy=${energy}&min_tempo=${energy * 100}&target_duration_ms=${Math.floor((duration * 60 * 1000) / limit)}`;
+  const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seedGenres}&min_energy=${energy}&min_tempo=${energy * 100}&target_duration_ms=${(duration * 60 * 1000) / limit}`;
 
   try {
     const response = await fetch(url, {
@@ -99,12 +50,7 @@ generateBtn.addEventListener("click", async () => {
         return;
       }
 
-      let error = {};
-      try {
-        error = await response.json();
-      } catch (e) {
-        console.error('Erro ao interpretar JSON do erro:', e);
-      }
+      const error = await response.json();
       console.error("Erro da API Spotify:", error);
       alert("Erro ao buscar músicas. Verifique seu token ou tente novamente.");
       return;
