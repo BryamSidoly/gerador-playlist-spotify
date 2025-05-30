@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerador de Playlist de Treino</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -15,26 +15,25 @@
     <label for="intensity">Intensidade do treino:</label>
     <select id="intensity">
       <option value="baixa">Baixa</option>
-      <option value="media">Média</option>
+      <option value="media" selected>Média</option>
       <option value="alta">Alta</option>
     </select>
 
-    <label for="gener">Genero:</label>
-    <select id="gener">
-      <option value="1">Opção 1</option>
-      <option value="2">Opção 2</option>
-      <option value="3">Opção 3</option>
-    </select>
+    <div id="genres">
+      <!-- Aqui serão criados dinamicamente os checkboxes dos gêneros -->
+    </div>
 
-    <label for="intensity">Misturar genero</label>
-    <input type="checkbox" name="misturar" id="misturar">
+    <label for="misturar" style="margin-top: 15px; display: block;">
+      <input type="checkbox" name="misturar" id="misturar" />
+      Misturar gêneros selecionados
+    </label>
 
     <label for="duration">Duração (minutos):</label>
     <input type="number" id="duration" min="1" max="120" value="30" />
 
     <button id="generate">Gerar Playlist</button>
 
-    <div id="playlist"></div>
+    <div id="playlist" style="margin-top: 20px;"></div>
   </div>
 
   <script src="script.js"></script>
