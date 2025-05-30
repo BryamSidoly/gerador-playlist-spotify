@@ -33,6 +33,9 @@ select {
 }
 
 button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 12px;
   width: 100%;
   background: #1DB954;
@@ -42,12 +45,23 @@ button {
   font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
+  user-select: none;
+}
+
+button svg {
+  transition: transform 0.3s;
 }
 
 button:hover {
   background: #1ed760;
+  transform: scale(1.05);
 }
+
+button:hover svg {
+  transform: translateX(4px);
+}
+
 
 audio {
   width: 100%;
