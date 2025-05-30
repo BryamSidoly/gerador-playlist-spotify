@@ -1,25 +1,87 @@
 const CLIENT_ID = '9099b5f49bf54e6b8a55c63827d9f743';
 const REDIRECT_URI = 'https://bryamsidoly.github.io/gerador-playlist-spotify/';
-const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
-const RESPONSE_TYPE = 'token';
+const SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize';
+const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 
 const generateBtn = document.getElementById("generate");
 const playlistDiv = document.getElementById("playlist");
+let accessToken = null;
 
-let accessToken = 'BQBhfzPZoYd0H7kHJMFJY2jQg2akAv8wwcyUEHtqAIQ3I6kaBJrcF_iaeOfe11qSfV60rjPki0snBwyM_UJ0xWl1ToIafRcKruUvjQ1mzh9nY8W6TR3-tvmzosKhwhhPzEflXPf56qI';
-
-// Autenticação
-window.onload = () => {
-  /*
-  const hash = window.location.hash;
-  if (!accessToken && hash) {
-    accessToken = new URLSearchParams(hash.substring(1)).get("access_token");
-    console.log("Token recebido:", accessToken);
-    window.history.replaceState(null, null, REDIRECT_URI);
+function generateRandomString(length) {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += charset.charAt(Math.floor(Math.random() * charset.length));
   }
-    */
-  if (!accessToken) {
-    window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
+  return result;
+}
+
+async function generateCodeChallenge(codeVerifier) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(codeVerifier);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+async function redirectToSpotifyAuth() {
+  const codeVerifier = generateRandomString(128);
+  const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+  localStorage.setItem('code_verifier', codeVerifier);
+
+  const params = new URLSearchParams({
+    client_id: CLIENT_ID,
+    response_type: 'code',
+    redirect_uri: REDIRECT_URI,
+    code_challenge_method: 'S256',
+    code_challenge: codeChallenge,
+    scope: 'user-read-private'
+  });
+
+  window.location = `${SPOTIFY_AUTH_URL}?${params}`;
+}
+
+async function fetchAccessToken(code) {
+  const codeVerifier = localStorage.getItem('code_verifier');
+
+  const body = new URLSearchParams({
+    client_id: CLIENT_ID,
+    grant_type: 'authorization_code',
+    code: code,
+    redirect_uri: REDIRECT_URI,
+    code_verifier: codeVerifier
+  });
+
+  const response = await fetch(SPOTIFY_TOKEN_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: body.toString()
+  });
+
+  const data = await response.json();
+  accessToken = data.access_token;
+  return accessToken;
+}
+
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+
+  if (!code) {
+    await redirectToSpotifyAuth();
+  } else {
+    try {
+      await fetchAccessToken(code);
+      window.history.replaceState({}, document.title, REDIRECT_URI); // Clean the URL
+    } catch (e) {
+      alert("Erro ao obter token de acesso. Tente novamente.");
+      console.error(e);
+    }
   }
 };
 
@@ -33,10 +95,10 @@ generateBtn.addEventListener("click", async () => {
   const duration = parseInt(document.getElementById("duration").value);
   const energy = getEnergyFromIntensity(intensity);
 
-  const seedGenres = "pop"; // gênero válido para o seed
+  const seedGenres = "pop";
   const limit = 10;
 
-  const url = `https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}`;
+  const url = `https://api.spotify.com/v1/recommendations?limit=${limit}&market=BR&seed_genres=${seedGenres}&min_energy=${energy}&min_tempo=${energy * 150}`;
 
   try {
     const response = await fetch(url, {
@@ -44,12 +106,6 @@ generateBtn.addEventListener("click", async () => {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
-        alert("Sua sessão expirou. Vamos fazer login novamente.");
-        window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
-        return;
-      }
-
       const error = await response.json();
       console.error("Erro da API Spotify:", error);
       alert("Erro ao buscar músicas. Verifique seu token ou tente novamente.");
@@ -69,7 +125,6 @@ generateBtn.addEventListener("click", async () => {
     alert("Ocorreu um erro inesperado. Tente novamente.");
   }
 });
-
 
 function getEnergyFromIntensity(intensity) {
   switch (intensity) {
