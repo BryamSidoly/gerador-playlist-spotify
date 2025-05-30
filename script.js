@@ -13,6 +13,7 @@ window.onload = () => {
   const hash = window.location.hash;
   if (!accessToken && hash) {
     accessToken = new URLSearchParams(hash.substring(1)).get("access_token");
+    console.log("Access Token:", accessToken);
     window.history.pushState("", "", REDIRECT_URI);
   } else if (!accessToken) {
     window.location = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=user-read-private`;
@@ -20,6 +21,10 @@ window.onload = () => {
 };
 
 generateBtn.addEventListener("click", async () => {
+   if (!accessToken) {
+    alert("Você precisa estar autenticado no Spotify.");
+    return;
+  }
   const intensity = document.getElementById("intensity").value;
   const duration = parseInt(document.getElementById("duration").value);
   const energy = getEnergyFromIntensity(intensity);
@@ -34,6 +39,20 @@ generateBtn.addEventListener("click", async () => {
   });
 
   const data = await response.json();
+  if (!response.ok) {
+  const error = await response.json();
+  console.error("Erro da API Spotify:", error);
+  alert("Erro ao buscar músicas. Verifique seu token ou tente novamente.");
+  return;
+}
+
+const data = await response.json();
+if (!data.tracks || data.tracks.length === 0) {
+  alert("Nenhuma música encontrada.");
+  return;
+}
+
+showPlaylist(data.tracks);
   showPlaylist(data.tracks);
 });
 
