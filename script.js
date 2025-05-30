@@ -1,5 +1,5 @@
 const CLIENT_ID = '9099b5f49bf54e6b8a55c63827d9f743';
-const REDIRECT_URI = 'http://localhost:8000/'; 
+const REDIRECT_URI = 'https://bryamsidoly.github.io/gerador-playlist-spotify/'; 
 const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const RESPONSE_TYPE = 'token';
 
