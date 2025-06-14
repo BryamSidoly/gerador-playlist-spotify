@@ -1,38 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" class="light">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Workout Playlist Generator</title>
+  <title>Gerador de Playlist de Treino</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    :root {
+      --bg-color: #f7f7f7;
+      --text-color: #000;
+    }
+
+    .dark {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    label,
+    input,
+    select {
+      display: block;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    button {
+      padding: 10px;
+      width: 100%;
+      background: #1DB954;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    audio {
+      width: 100%;
+      margin: 5px 0;
+    }
+
+    /* Theme switch styles */
+    .theme-switch {
+      position: relative;
+      width: 140px;
+      height: 36px;
+      background-color: #e4e4e4;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      margin: 20px auto;
+      transition: background-color 0.3s ease;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .theme-switch .label {
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .theme-switch .label-light {
+      color: #222;
+    }
+
+    .theme-switch .label-dark {
+      color: #fff;
+    }
+
+    .dark .theme-switch {
+      background-color: #333;
+    }
+
+    .switch-thumb {
+      position: absolute;
+      width: 60px;
+      height: 28px;
+      border-radius: 999px;
+      background-color: #fff;
+      top: 4px;
+      left: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: left 0.3s ease, background-color 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .dark .switch-thumb {
+      left: 76px;
+      background-color: #000;
+    }
+
+    .icon-text {
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    /* Oculta o texto conforme o tema */
+    .dark .label-dark {
+      opacity: 0;
+    }
+
+    .light .label-light {
+      opacity: 0;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Workout Playlist</h1>
-
-    <label for="intensity">Workout Intensity:</label>
-    <select id="intensity">
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-
-    <label for="duration">Duration (minutes):</label>
-    <input type="number" id="duration" min="1" max="120" value="30" />
-
-    <button id="generate">
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 8px;">
-    <path d="M8 5v14l11-7z"/>
-  </svg>
-  Generate Playlist
-</button>
-
-
-    <div id="playlist"></div>
+  <div class="theme-switch" onclick="toggleTheme()">
+    <div class="switch-thumb">
+      <span class="icon-text" id="theme-icon">🌙</span>
+    </div>
+    <span class="label label-light">DAY MODE</span>
+    <span class="label label-dark">NIGHT MODE</span>
   </div>
 
+  <div class="container">
+    <h1>Playlist de Treino</h1>
+
+    <label for="intensity">Intensidade do treino:</label>
+    <select id="intensity">
+      <option value="baixa">Baixa</option>
+      <option value="media" selected>Média</option>
+      <option value="alta">Alta</option>
+    </select>
+
+    <div id="genres">
+      <!-- Checkboxes criados dinamicamente -->
+    </div>
+
+    <label for="misturar" style="margin-top: 15px; display: block;">
+      <input type="checkbox" name="misturar" id="misturar" />
+      Misturar gêneros selecionados
+    </label>
+
+    <label for="duration">Duração (minutos):</label>
+    <input type="number" id="duration" min="1" max="120" value="30" />
+
+    <button id="generate">Gerar Playlist</button>
+
+    <div id="playlist" style="margin-top: 20px;"></div>
+  </div>
+
+  <script>
+    // Tema claro/escuro
+    function applyTheme(theme) {
+      document.documentElement.className = theme;
+      document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀' : '🌙';
+      localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    }
+
+    window.onload = () => {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      applyTheme(savedTheme);
+    };
+  </script>
   <script src="script.js"></script>
 </body>
 
