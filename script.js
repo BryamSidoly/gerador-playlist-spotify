@@ -168,6 +168,26 @@ async function createAndPlayPlaylist(tracks) {
     body: JSON.stringify({ uris })
   });
 
+  function renderGenreCheckboxes(genres) {
+  genresContainer.innerHTML = "<h3>Selecione gêneros para a playlist:</h3>";
+  genres.forEach((genre) => {
+    const id = `genre-${genre}`;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "genre";
+    checkbox.value = genre;
+    checkbox.id = id;
+
+    const label = document.createElement("label");
+    label.setAttribute("for", id);
+    label.textContent = genre;
+
+    genresContainer.appendChild(checkbox);
+    genresContainer.appendChild(label);
+  });
+}
+
   // Start playback of the playlist on the user's active device
   await fetch("https://api.spotify.com/v1/me/player/play", {
     method: 'PUT',
