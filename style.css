@@ -1,95 +1,122 @@
-body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    body {
+      font-family: sans-serif;
       padding: 1rem;
-      background-color: #121212; /* Spotify dark background */
-      color: #FFFFFF;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    :root {
+      --bg-color: #f7f7f7;
+      --text-color: #000;
+    }
+
+    .dark {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
     }
 
     .container {
       max-width: 500px;
       margin: auto;
-      background-color: #181818; /* Slightly lighter dark */
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: var(--bg-color);
+      color: var(--text-color);
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-      color: #1DB954; /* Spotify green */
-    }
-
-    label {
+    label,
+    input,
+    select {
       display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: #b3b3b3;
-    }
-
-    select,
-    input[type="number"] {
-      display: block;
+      margin-bottom: 10px;
       width: 100%;
-      padding: 0.6rem 1rem;
-      margin-bottom: 1.2rem;
-      border-radius: 8px;
+    }
+
+    button {
+      padding: 10px;
+      width: 100%;
+      background: #1DB954;
+      color: white;
       border: none;
-      background-color: #282828;
-      color: #FFFFFF;
+      border-radius: 5px;
       font-size: 1rem;
-      transition: background-color 0.3s ease;
-    }
-
-    select:hover,
-    input[type="number"]:hover,
-    select:focus,
-    input[type="number"]:focus {
-      background-color: #333333;
-      outline: none;
-    }
-
-
-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  width: 100%;
-  background: #1DB954;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-  user-select: none;
-}
-
-button svg {
-  transition: transform 0.3s;
-}
-
-button:hover {
-  background: #1ed760;
-  transform: scale(1.05);
-}
-
-button:hover svg {
-  transform: translateX(4px);
-}
-
-#playlist {
-      margin-top: 1.5rem;
-      color: #b3b3b3;
     }
 
     audio {
       width: 100%;
-      margin: 0.7rem 0;
-      outline: none;
-      border-radius: 8px;
-      background-color: #282828;
+      margin: 5px 0;
+    }
+
+    /* Theme switch styles */
+    .theme-switch {
+      position: relative;
+      width: 140px;
+      height: 36px;
+      background-color: #e4e4e4;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      margin: 20px auto;
+      transition: background-color 0.3s ease;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .theme-switch .label {
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .theme-switch .label-light {
+      color: #222;
+    }
+
+    .theme-switch .label-dark {
+      color: #fff;
+    }
+
+    .dark .theme-switch {
+      background-color: #333;
+    }
+
+    .switch-thumb {
+      position: absolute;
+      width: 60px;
+      height: 28px;
+      border-radius: 999px;
+      background-color: #fff;
+      top: 4px;
+      left: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: left 0.3s ease, background-color 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .dark .switch-thumb {
+      left: 76px;
+      background-color: #000;
+    }
+
+    .icon-text {
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    /* Oculta o texto conforme o tema */
+    .dark .label-dark {
+      opacity: 0;
+    }
+
+    .light .label-light {
+      opacity: 0;
     }
