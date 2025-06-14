@@ -6,10 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerador de Playlist de Treino</title>
   <link rel="stylesheet" href="style.css" />
-
 </head>
 
-<body class="dark">
+<body>
   <div class="theme-switch" onclick="toggleTheme()">
     <div class="switch-thumb">
       <span class="icon-text" id="theme-icon">🌙</span>
@@ -29,7 +28,6 @@
     </select>
 
     <div id="genres">
-      <!-- Checkboxes criados dinamicamente -->
     </div>
 
     <label for="misturar" style="margin-top: 15px; display: block;">
@@ -46,7 +44,6 @@
   </div>
 
   <script>
-    // Tema claro/escuro
     function applyTheme(theme) {
       document.documentElement.className = theme;
       document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀' : '🌙';
