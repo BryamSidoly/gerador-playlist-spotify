@@ -73,12 +73,12 @@ generateBtn.addEventListener("click", async () => {
   }
 
   const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(el => el.value);
-
+/*
   if (selectedGenres.length === 0) {
     alert("Selecione pelo menos um gênero.");
     return;
   }
-
+*/
   const intensity = document.getElementById("intensity").value;
   const duration = parseInt(document.getElementById("duration").value);
   const energy = getEnergyFromIntensity(intensity);
