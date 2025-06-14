@@ -1,131 +1,112 @@
-<style>
-  :root {
-    --bg-light: #f7f7f7;
-    --text-light: #000;
-    --bg-dark: #121212;
-    --text-dark: #fff;
-    --spotify-green: #1DB954;
-    --field-bg-light: #fff;
-    --field-bg-dark: #181818;
-    --border-radius: 8px;
-  }
+:root {
+  --bg-dark: #121212;
+  --container-bg: #181818;
+  --text-color: #ffffff;
+  --input-bg: #282828;
+  --spotify-green: #1DB954;
+  --spotify-green-hover: #1ed760;
+  --border-radius: 8px;
+  --transition: 0.3s ease;
+}
 
-  body {
-    font-family: 'Helvetica Neue', sans-serif;
-    padding: 1rem;
-    background: var(--bg-light);
-    color: var(--text-light);
-    transition: background 0.3s ease, color 0.3s ease;
-  }
+body {
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-color);
+  margin: 0;
+  padding: 2rem;
+}
 
-  .dark body {
-    background: var(--bg-dark);
-    color: var(--text-dark);
-  }
+.container {
+  max-width: 500px;
+  margin: auto;
+  background-color: var(--container-bg);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
 
-  .container {
-    max-width: 500px;
-    margin: auto;
-    background: var(--field-bg-light);
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-    transition: background 0.3s ease;
-  }
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
 
-  .dark .container {
-    background: var(--field-bg-dark);
-  }
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
 
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+input[type="number"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  transition: background-color var(--transition);
+}
 
-  label {
-    margin-top: 15px;
-    font-weight: 500;
-  }
+input[type="number"]:focus,
+select:focus {
+  outline: 2px solid var(--spotify-green);
+}
 
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 10px;
-    border-radius: var(--border-radius);
-    border: none;
-    margin-top: 5px;
-    background-color: #efefef;
-    transition: background 0.3s ease;
-  }
+#genres {
+  margin-bottom: 1rem;
+}
 
-  .dark input[type="number"],
-  .dark select {
-    background-color: #282828;
-    color: #fff;
-  }
+#genres h3 {
+  margin-bottom: 0.5rem;
+}
 
-  input[type="number"]:focus,
-  select:focus {
-    outline: 2px solid var(--spotify-green);
-  }
+#genres input[type="checkbox"] {
+  display: none;
+}
 
-  input[type="checkbox"] {
-    accent-color: var(--spotify-green);
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
-    vertical-align: middle;
-  }
+#genres label {
+  display: inline-block;
+  background-color: #333;
+  color: #ccc;
+  padding: 8px 12px;
+  margin: 5px 5px 0 0;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition);
+}
 
-  button {
-    padding: 12px;
-    margin-top: 15px;
-    width: 100%;
-    background: var(--spotify-green);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-  }
+#genres input[type="checkbox"]:checked + label {
+  background-color: var(--spotify-green);
+  color: white;
+}
 
-  button:hover {
-    background: #1ed760;
-    transform: scale(1.01);
-  }
+#misturar {
+  width: auto;
+  margin-right: 10px;
+}
 
-  audio {
-    width: 100%;
-    margin: 10px 0;
-  }
+button {
+  background-color: var(--spotify-green);
+  color: white;
+  padding: 12px;
+  border: none;
+  width: 100%;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color var(--transition), transform 0.2s;
+}
 
-  #playlist p {
-    margin: 0;
-  }
+button:hover {
+  background-color: var(--spotify-green-hover);
+  transform: scale(1.01);
+}
 
-  /* Ajuste nos checkboxes de gêneros */
-  #genres label {
-    display: inline-block;
-    margin: 5px 10px 5px 0;
-    padding: 8px 10px;
-    background-color: #eeeeee;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-
-  .dark #genres label {
-    background-color: #2a2a2a;
-    color: #fff;
-  }
-
-  #genres input[type="checkbox"] {
-    display: none;
-  }
-
-  #genres input[type="checkbox"]:checked + label {
-    background-color: var(--spotify-green);
-    color: white;
-  }
-</style>
+audio {
+  width: 100%;
+  margin-top: 10px;
+}
